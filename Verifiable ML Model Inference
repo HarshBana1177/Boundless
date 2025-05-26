@@ -1,0 +1,16 @@
+// Rust zkApp logic
+fn run_inference(input: Vec<u8>) -> Vec<u8> {
+   let model = load_model();
+   model.predict(input)
+}
+
+# Build proof-enabled binary
+risc0 build --release
+
+# Run it + generate a zk-proof
+risc0 prove ./run_inference input.json
+
+# Submit proof for verification
+risc0 verify --receipt ./proof.json
+
+# You just proved that the output of an ML model was correct
