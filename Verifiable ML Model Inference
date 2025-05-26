@@ -1,16 +1,50 @@
-// Rust zkApp logic
+Step 1: Run Inference in zkApp
+
+# You define the logic in Rust:
+
 fn run_inference(input: Vec<u8>) -> Vec<u8> {
    let model = load_model();
    model.predict(input)
 }
 
-# Build proof-enabled binary
+# Let’s say your input is:
+
+[0.7, 0.1, 0.2]
+
+And the model is a simple classifier that outputs:
+
+[0, 1]  // e.g., class 1 with high confidence
+
+
+
+Step 2: Build Proof-Enabled Binary
+
 risc0 build --release
 
-# Run it + generate a zk-proof
+Output: 
+✔️ Compiled zkVM guest binary: ./target/risc0-zkvm/release/run_inference
+
+
+
+Step 3: Generate Zero-Knowledge Proof
+
 risc0 prove ./run_inference input.json
 
-# Submit proof for verification
+Output:
+✔️ Inference completed: output = [0, 1]
+✔️ Proof generated: ./proof.json
+
+
+Step 4: Verify the Proof
+
 risc0 verify --receipt ./proof.json
 
-# You just proved that the output of an ML model was correct
+Output:
+✔️ Proof verified successfully.
+
+
+Final Output Summary:
+
+Inference Output: [0, 1]
+Proof File: proof.json
+Verification Status: ✅ Validated
